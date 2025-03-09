@@ -1,0 +1,20 @@
+FROM ubuntu
+RUN apt-get update && apt-get -y install python3 python3-pip git
+RUN pip install flask
+RUN git clone https://github.com/meldafrawi/basic-flask-app.git
+WORKDIR /basic-flask-app
+ENTRYPOINT ["flask","--app","routes.py","run","-h","0.0.0.0" ]
+
+
+
+
+FROM alpine AS temp
+RUN apk add --no-cache git
+RUN git clone https://github.com/meldafrawi/basic-flask-app.git
+
+
+FROM alpine
+RUN apk add --no-cache --update python3 py3-flask git
+RUN git clone https://github.com/meldafrawi/basic-flask-app.git
+WORKDIR /basic-flask-app
+ENTRYPOINT ["python3", "-m", "flask", "--app", "routes.py", "run", "-h", "0.0.0.0"]
